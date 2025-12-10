@@ -1,6 +1,15 @@
 import streamlit as st
 import pandas as pd
-import joblib
+try:
+    import joblib
+except Exception:
+    # If joblib is missing, show a clear message in the app and stop instead of raising
+    st.title("Heart Disease Risk Predictor")
+    st.error(
+        "Missing dependency: `joblib` is not installed in the environment.\n"
+        "Please add `joblib` to `requirements.txt`, commit & push, then redeploy the app."
+    )
+    st.stop()
 from pathlib import Path
 
 # Try to locate the model in a few likely locations (so app works from different cwd)
@@ -122,3 +131,4 @@ if st.button("Predict"):
     st.write(f"Predicted probability of heart disease: {proba:.3f}")
     label = "HIGH RISK" if proba > 0.5 else "LOW RISK"
     st.markdown(f"### Risk: **{label}**")
+
